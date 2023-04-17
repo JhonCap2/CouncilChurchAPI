@@ -10,7 +10,7 @@ namespace CouncilChurch.Core.DTOs
 {
     public class SocialNetworkDto
     {
-        [JsonIgnore]
+       
         public Guid IdSocialNetworks { get; set; }
 
         public string? NameNetworks { get; set; }

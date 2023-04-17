@@ -10,7 +10,7 @@ namespace CouncilChurch.Core.DTOs
 {
     public class CouncilDto
     {
-        [JsonIgnore]
+        
         public Guid IdCouncil { get; set; }
 
         public Guid? IdSocialNetworks { get; set; }
