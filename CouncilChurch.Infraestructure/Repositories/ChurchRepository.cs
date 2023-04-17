@@ -32,6 +32,7 @@ namespace CouncilChurch.Infraestructure.Repositories
             var church = await _context.Churches
                     .Include(x => x.IdAddressNavigation)
                     .Include(x => x.IdCouncilNavigation)
+                    .AsNoTracking()
                     .SingleOrDefaultAsync(x => x.IdChurch == id);
             return church;
         }
@@ -51,10 +52,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateChurch(Church church)
         {
             var currentchurch = await GetChurch(church.IdChurch);
-            currentchurch.NameChurch = church.NameChurch;
-            currentchurch.IdAddress = church.IdAddress;
-            currentchurch.IdCouncil = church.IdCouncil;
-            currentchurch.Web = church.Web;
+            if (currentchurch == null) { return false; }
+
+            _context.Attach(currentchurch).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

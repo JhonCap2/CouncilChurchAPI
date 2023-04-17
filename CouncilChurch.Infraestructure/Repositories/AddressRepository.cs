@@ -28,7 +28,7 @@ namespace CouncilChurch.Infraestructure.Repositories
 
         public async Task<Address> GetAddress(Guid id)
         {
-            var addresses = await _context.Addresses.SingleOrDefaultAsync(x => x.IdAddress == id);
+            var addresses = await _context.Addresses.AsNoTracking().SingleOrDefaultAsync(x => x.IdAddress == id);
             return addresses;
         }
 
@@ -47,7 +47,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateAddress(Address address)
         {
             var currentaddress = await GetAddress(address.IdAddress);
-            currentaddress.AddressChurch = address.AddressChurch;
+            if(currentaddress == null) { return false; }
+
+            _context.Attach(address).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

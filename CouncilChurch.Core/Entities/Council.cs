@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CouncilChurch.Core.Entities
@@ -17,9 +18,9 @@ namespace CouncilChurch.Core.Entities
         public string? Imail { get; set; }
 
         public string? Web { get; set; }
-
+        [JsonIgnore]
         public virtual ICollection<Church> Churches { get; set; } = new List<Church>();
-
+        [JsonIgnore]
         public virtual SocialNetwork? IdSocialNetworksNavigation { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CouncilChurch.Core.DTOs
@@ -30,13 +31,13 @@ namespace CouncilChurch.Core.DTOs
         public string? Nickname { get; set; }
 
         public DateTime? Birthdate { get; set; }
-
+        [JsonIgnore]
         public virtual Address? IdAddressNavigation { get; set; }
-
+        [JsonIgnore]
         public virtual Church? IdChurchNavigation { get; set; }
-
+        [JsonIgnore]
         public virtual CivilState? IdCivilStatesNavigation { get; set; }
-
+        [JsonIgnore]
         public virtual Profession? IdProfessionNavigation { get; set; }
     }
 }

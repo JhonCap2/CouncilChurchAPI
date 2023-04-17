@@ -29,7 +29,9 @@ namespace CouncilChurch.Infraestructure.Repositories
 
         public async Task<Council> GetCouncil(Guid id)
         {
-            var council = await _context.Councils.Include(x => x.IdSocialNetworks).SingleOrDefaultAsync(x => x.IdCouncil == id);
+            var council = await _context.Councils.Include(x => x.IdSocialNetworksNavigation)
+                    .AsNoTracking()
+                    .SingleOrDefaultAsync(x => x.IdCouncil == id);
             return council;
         }
 
@@ -48,10 +50,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateCouncil(Council council)
         {
             var currentaddress = await GetCouncil(council.IdCouncil);
-            currentaddress.IdSocialNetworks = council.IdSocialNetworks;
-            currentaddress.Web = council.Web;
-            currentaddress.Rnc = council.Rnc;
-            currentaddress.Imail = council.Imail;
+            if (currentaddress == null) { return false; }
+
+            _context.Attach(council).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

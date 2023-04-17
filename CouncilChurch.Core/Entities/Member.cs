@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CouncilChurch.Core.Entities
@@ -19,8 +20,8 @@ namespace CouncilChurch.Core.Entities
         public Guid? IdProfession { get; set; }
 
         public string? FirstName { get; set; }
-
-        public string? SecondName { get; set; }
+        
+        public string? SecondName { get; set; } //Cambiar el second por Last
 
         public string? FirstSurname { get; set; }
 
@@ -29,13 +30,13 @@ namespace CouncilChurch.Core.Entities
         public string? Nickname { get; set; }
 
         public DateTime? Birthdate { get; set; }
-
+        [JsonIgnore]
         public virtual Address? IdAddressNavigation { get; set; }
-
+        
         public virtual Church? IdChurchNavigation { get; set; }
-
+        
         public virtual CivilState? IdCivilStatesNavigation { get; set; }
-
+        
         public virtual Profession? IdProfessionNavigation { get; set; }
     }
 }

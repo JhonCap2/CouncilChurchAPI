@@ -29,13 +29,14 @@ namespace CouncilChurch.Infraestructure.Repositories
 
         public async Task<Core.Entities.Member> GetMember(Guid id)
         {
-            var church = await _context.Members
-                    .Include(x => x.IdChurch)
-                    .Include(x => x.IdAddress)
-                    .Include(x => x.IdProfession)
-                    .Include(x => x.IdCivilStates)
+            var member = await _context.Members
+                    .Include(x => x.IdChurchNavigation)
+                    .Include(x => x.IdAddressNavigation)
+                    .Include(x => x.IdProfessionNavigation)
+                    .Include(x => x.IdCivilStatesNavigation)
+                    .AsNoTracking()
                     .SingleOrDefaultAsync(x => x.IdMembers == id);
-            return church;
+            return member;
         }
 
         public async Task<IEnumerable<Core.Entities.Member>> GetMembers()
@@ -53,16 +54,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateMember(Core.Entities.Member member)
         {
             var currentchurch = await GetMember(member.IdMembers);
-            currentchurch.IdChurch = member.IdChurch;
-            currentchurch.IdProfession = member.IdProfession;
-            currentchurch.IdAddress = member.IdAddress;
-            currentchurch.IdCivilStates = member.IdCivilStates;
-            currentchurch.FirstName = member.FirstName;
-            currentchurch.SecondName = member.SecondName;
-            currentchurch.FirstSurname = member.FirstSurname;
-            currentchurch.SecondSurname = member.SecondSurname;
-            currentchurch.Nickname = member.Nickname;
-            currentchurch.Birthdate = member.Birthdate;
+            if (currentchurch == null) { return false; }
+
+            _context.Attach(member).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

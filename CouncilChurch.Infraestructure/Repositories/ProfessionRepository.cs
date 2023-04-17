@@ -28,7 +28,7 @@ namespace CouncilChurch.Infraestructure.Repositories
 
         public async Task<Profession> GetProfession(Guid id)
         {
-            var profession = await _context.Professions.SingleOrDefaultAsync(x => x.IdProfession == id);
+            var profession = await _context.Professions.AsNoTracking().SingleOrDefaultAsync(x => x.IdProfession == id);
             return profession;
         }
 
@@ -47,7 +47,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateProfession(Profession profession)
         {
             var currentchurch = await GetProfession(profession.IdProfession);
-            currentchurch.NameProfession = profession.NameProfession;
+            if (currentchurch == null) { return false; }
+
+            _context.Attach(profession).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

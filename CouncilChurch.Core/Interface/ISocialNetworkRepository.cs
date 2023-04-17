@@ -1,4 +1,5 @@
-﻿using CouncilChurch.Core.Entities;
+﻿using CouncilChurch.Core.DTOs;
+using CouncilChurch.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CouncilChurch.Core.Interface
 {
     public interface ISocialNetworkRepository
     {
-        Task<IEnumerable<SocialNetwork>> GetSocialNetworks();
+        Task<IEnumerable<SocialNetwork>> GetSocialNetworks(); 
         Task<SocialNetwork> GetSocialNetwork(Guid id);
         Task InsertSocialNetwork(SocialNetwork newsocialNetwork);
         Task<bool> UpdateSocialNetwork(SocialNetwork socialNetwork);

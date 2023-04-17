@@ -37,24 +37,29 @@ namespace CouncilChurch.Api.Controllers
             return Ok(addressDto);
         }
         [HttpPost]
-        public async Task<IActionResult> InsertAddress(Address newaddress)
+        public async Task<IActionResult> InsertAddress(AddressDto newaddress)
         {
-            await _addressRespository.InsertAddress(newaddress);
-            var addressDto = _mapper.Map<AddressDto>(newaddress);
+            var addressDto = _mapper.Map<Address>(newaddress);
+            await _addressRespository.InsertAddress(addressDto);
             return Ok(addressDto);
         }
         [HttpPut]
         public async Task<ActionResult> UpdateAddress(AddressDto upaddress)
         { 
             var address = _mapper.Map<Address>(upaddress);
+            
             await _addressRespository.UpdateAddress(address);
             return Ok(address);
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAddress(Guid id)
         {
-            var address = await _addressRespository.DeleteAddress(id);
-            return Ok(address);
+            var address = await _addressRespository.GetAddress(id);
+            var adDelete = await _addressRespository.DeleteAddress(id);
+            if (adDelete) 
+            return Ok($"La dirección {address.AddressChurch} fue eliminada correctamente ");
+            else
+            return StatusCode(500, $"Operación no procesada o el GUID '{id}'no existe.");
         }
     }
 }

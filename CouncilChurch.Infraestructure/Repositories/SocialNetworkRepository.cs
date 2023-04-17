@@ -22,6 +22,8 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> DeleteSocialNetwork(Guid id)
         {
             var currentsocialnetwork = await GetSocialNetwork(id);
+            if (currentsocialnetwork == null) { return false; }
+
             _context.SocialNetworks.Remove(currentsocialnetwork);
             int rows = await _context.SaveChangesAsync();
             return rows > 0;
@@ -29,7 +31,7 @@ namespace CouncilChurch.Infraestructure.Repositories
 
         public async Task<SocialNetwork> GetSocialNetwork(Guid id)
         {
-            var socialnetwork = await _context.SocialNetworks.SingleOrDefaultAsync(x => x.IdSocialNetworks == id);
+            var socialnetwork = await _context.SocialNetworks.AsNoTracking().SingleOrDefaultAsync(x => x.IdSocialNetworks == id);
             return socialnetwork;
         }
 
@@ -48,7 +50,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateSocialNetwork(SocialNetwork socialNetwork)
         {
             var currentsocialnetwork = await GetSocialNetwork(socialNetwork.IdSocialNetworks);
-            currentsocialnetwork.NameNetworks = socialNetwork.NameNetworks;
+            if (currentsocialnetwork == null) { return false; }
+
+            _context.Attach(socialNetwork).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

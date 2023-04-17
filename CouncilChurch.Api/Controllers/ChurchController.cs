@@ -37,11 +37,11 @@ namespace CouncilChurch.Api.Controllers
             return Ok(addressDto);
         }
         [HttpPost]
-        public async Task<IActionResult> InsertChurch(Church newchurch)
+        public async Task<IActionResult> InsertChurch(ChurchDto newchurch)
         {
-            await _churchRepository.InsertChurch(newchurch);
-            var churchDto = _mapper.Map<ChurchDto>(newchurch);
-            return Ok(churchDto);
+            var church = _mapper.Map<Church>(newchurch);
+            await _churchRepository.InsertChurch(church);
+            return Ok(church);
         }
         [HttpPut]
         public async Task<ActionResult> UpdateChurch(ChurchDto upchurch)
@@ -53,8 +53,12 @@ namespace CouncilChurch.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteChurch(Guid id)
         {
-            var church = await _churchRepository.DeleteChurch(id);
-            return Ok(church);
+            var church = await _churchRepository.GetChurch(id);
+            var churchDelete = await _churchRepository.DeleteChurch(id);
+            if(churchDelete)
+                return Ok($"La iglesia {churchDelete} fue eliminada");
+            else
+            return StatusCode(500, $"Operación no procesada o el GUID '{id}'no existe.");
         }
     }
 

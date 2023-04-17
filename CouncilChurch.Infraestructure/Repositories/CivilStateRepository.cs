@@ -29,7 +29,7 @@ namespace CouncilChurch.Infraestructure.Repositories
 
         public async Task<CivilState> GetCivilState(Guid id)
         {
-            var civilstate = await _context.CivilStates.SingleOrDefaultAsync(x => x.IdCivilStates == id);
+            var civilstate = await _context.CivilStates.AsNoTracking().SingleOrDefaultAsync(x => x.IdCivilStates == id);
             return civilstate;
         }
 
@@ -48,7 +48,9 @@ namespace CouncilChurch.Infraestructure.Repositories
         public async Task<bool> UpdateCivilState(CivilState civilstate)
         {
             var currentaddress = await GetCivilState(civilstate.IdCivilStates);
-            currentaddress.NameCivilState = civilstate.NameCivilState;
+            if(currentaddress == null) { return false; }
+
+            _context.Attach(civilstate).State = EntityState.Modified;
 
             int rows = await _context.SaveChangesAsync();
             return rows > 0;

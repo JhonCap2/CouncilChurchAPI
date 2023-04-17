@@ -13,27 +13,19 @@ namespace CouncilChurch.Infraestructure.Mappings
     {
         public AutomapperProfile() 
         {
-            CreateMap<Address, AddressDto>();
-            CreateMap<AddressDto, Address>();
+            CreateMap<Address, AddressDto>().ReverseMap();
 
-            CreateMap<Church, ChurchDto>();
-            CreateMap<ChurchDto, Church>();
+            CreateMap<Church, ChurchDto>().ReverseMap();
 
-            CreateMap<CivilState, CivilStateDto>();
-            CreateMap<CivilStateDto, CivilState>();
+            CreateMap<CivilState, CivilStateDto>().ReverseMap();
 
-            CreateMap<Council, CouncilDto>();
-            CreateMap<CouncilDto, Council>();
+            CreateMap<Council, CouncilDto>().ReverseMap();
 
-            CreateMap<Member, ChurchDto>();
-            CreateMap<ChurchDto, Church>();
+            CreateMap<Member, MemberDto>().ReverseMap();
 
-            CreateMap<Profession, ProfessionDto>();
-            CreateMap<ProfessionDto, Profession>();
+            CreateMap<Profession, ProfessionDto>().ReverseMap();
 
-            CreateMap<SocialNetwork, ProfessionDto>();
-            CreateMap<ProfessionDto, SocialNetwork>();
-
+            CreateMap<SocialNetwork, SocialNetworkDto>().ReverseMap();
         }
     }
 }
